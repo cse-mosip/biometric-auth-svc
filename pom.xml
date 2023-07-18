@@ -38,6 +38,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.machinezoo.sourceafis</groupId>
+			<artifactId>sourceafis</artifactId>
+			<version>3.17.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
