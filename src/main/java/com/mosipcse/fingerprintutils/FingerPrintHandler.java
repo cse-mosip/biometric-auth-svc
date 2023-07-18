@@ -17,11 +17,31 @@ public class FingerPrintHandler {
         FingerprintMatcher matcher = getFingerPrintMatcher(filepath);
         IdentityRecord successfulMatch = matchFingerprint(matcher) ;
         if (successfulMatch == null) {
+            System.out.println("No matches found") ;
             return null ;
         }
+        System.out.println("Match found") ;
         return successfulMatch.getId();
     }
-
+    public String enterNewRecord(String filepath) {
+        System.out.println("Matching in progress");
+        FingerprintMatcher matcher = getFingerPrintMatcher(filepath);
+        IdentityRecord successfulMatch = matchFingerprint(matcher) ;
+        if (successfulMatch == null) {
+            System.out.println("No matches found") ;
+            /*
+            * TODO:
+            *  many-to-many matching: all ten incoming with each in DB
+            * better to handle prints as of specific fingers. lesser matching tasks
+            * TODO:
+            *  save to fingerprint arraylist
+            * TODO: serialize at shutdown
+            *
+            * */
+        }
+        System.out.println("Match found") ;
+        return null ;
+    }
     private IdentityRecord matchFingerprint(FingerprintMatcher matcher) {
         IdentityRecord matchingId = null;
         double max = Double.NEGATIVE_INFINITY;
@@ -37,10 +57,6 @@ public class FingerPrintHandler {
         }
         double threshold = 40;
         return max >= threshold ? matchingId : null;
-    }
-
-    public String enterNewRecord(String filepath) {
-        return "id" ;
     }
 
     private FingerprintMatcher getFingerPrintMatcher(String filepath) {
