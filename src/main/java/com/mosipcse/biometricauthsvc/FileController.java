@@ -1,12 +1,13 @@
-package com.mosipcse.fileSaver;
+package com.mosipcse.biometricauthsvc;
 
+import com.mosipcse.fileHandler.FileUploadResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.util.StringUtils ;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,6 +16,10 @@ import java.nio.file.Paths;
 
 @RestController
 public class FileController {
+
+    FileController() {
+
+    }
 
     @PostMapping("/upload")
     public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile file) {

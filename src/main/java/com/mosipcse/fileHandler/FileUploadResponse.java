@@ -1,4 +1,4 @@
-package com.mosipcse.fileSaver;
+package com.mosipcse.fileHandler;
 
 public class FileUploadResponse {
     private String status;
