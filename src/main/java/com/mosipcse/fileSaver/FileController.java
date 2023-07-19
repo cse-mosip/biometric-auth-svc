@@ -13,12 +13,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
 @RestController
 public class FileController {
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile file) {
 
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("File is empty");
@@ -49,17 +48,13 @@ public class FileController {
 
             // Save the file to the specified path
             Files.copy(file.getInputStream(), filePath);
-
             String responseMessage = "File saved successfully.";
-
             FileUploadResponse response = new FileUploadResponse(responseMessage, filePath.toString());
 
             return ResponseEntity.ok(response);
 
-
         } catch (IOException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save file");
         }
-        return ResponseEntity.ok("File saved successfully");
     }
 }
