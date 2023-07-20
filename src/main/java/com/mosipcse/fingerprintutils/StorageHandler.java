@@ -19,9 +19,9 @@ public class StorageHandler {
         }
     }
     public static ArrayList<IdentityRecord> loadFingerprints(String filename) {
-        ArrayList<IdentityRecord> list = null;
+        ArrayList<IdentityRecord> list = new ArrayList<>();
 
-        try (FileInputStream fis = new FileInputStream("listData");
+        try (FileInputStream fis = new FileInputStream("fingerprintDatachang");
              ObjectInputStream ois = new ObjectInputStream(fis);) {
 
             list = (ArrayList<IdentityRecord>) ois.readObject();
