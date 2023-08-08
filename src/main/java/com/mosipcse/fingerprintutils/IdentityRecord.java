@@ -9,7 +9,7 @@ public class IdentityRecord implements Serializable {
     private final String id ;
     private final ArrayList<FingerprintTemplate> fingerprints ;
 
-    IdentityRecord(String id, ArrayList<FingerprintTemplate> fingerprints) {
+    public IdentityRecord(String id, ArrayList<FingerprintTemplate> fingerprints) {
         this.fingerprints = fingerprints ;
         this.id = id ;
     }

@@ -1,7 +1,10 @@
 package com.mosipcse.fingerprintutils;
 
+import com.machinezoo.sourceafis.FingerprintTemplate;
+
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class StorageHandler {
     public static void serializeFingerprints(ArrayList<IdentityRecord> fingerprintData) {
@@ -32,5 +35,12 @@ public class StorageHandler {
             c.printStackTrace();
         }
         return list ;
+    }
+    private static IdentityRecordDAO convertToDAO(IdentityRecord idRecord){
+        String id = idRecord.getId() ;
+        ArrayList<FingerprintTemplate> fingerprints = idRecord.getFingerprints() ;
+        ArrayList<byte[]> fingerprintsByteArr = new ArrayList<>() ;
+        fingerprints.forEach((temp)-> fingerprintsByteArr.add(temp.toByteArray()));
+        return new IdentityRecordDAO(id, fingerprintsByteArr) ;
     }
 }
