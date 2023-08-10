@@ -70,7 +70,7 @@ public class FingerPrintHandler {
     }
 
     private FingerprintMatcher getFingerPrintMatcher(String filepath) {
-        FingerprintTemplate template = this.getFingerPrintTemplate(filepath) ;
+        FingerprintTemplate template = getFingerPrintTemplate(filepath) ;
         return new FingerprintMatcher(template);
     }
 
