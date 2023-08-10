@@ -36,7 +36,7 @@ public class StorageHandler {
         }
         return list ;
     }
-    private static IdentityRecordDAO convertToDAO(IdentityRecord idRecord){
+    public static IdentityRecordDAO convertToDAO(IdentityRecord idRecord){
         String id = idRecord.getId() ;
         ArrayList<FingerprintTemplate> fingerprints = idRecord.getFingerprints() ;
         ArrayList<byte[]> fingerprintsByteArr = new ArrayList<>() ;

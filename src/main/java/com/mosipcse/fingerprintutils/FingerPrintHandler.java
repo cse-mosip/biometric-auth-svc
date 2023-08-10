@@ -12,6 +12,10 @@ import java.util.ArrayList;
 
 public class FingerPrintHandler {
     private ArrayList<IdentityRecord> fingerprintDb;
+
+    public FingerPrintHandler(ArrayList<IdentityRecord> fingerprintDb) {
+        this.fingerprintDb = fingerprintDb ;
+    }
     public String findMatchingPrint(String filepath) {
         System.out.println("Matching in progress");
         FingerprintMatcher matcher = getFingerPrintMatcher(filepath);
@@ -31,16 +35,22 @@ public class FingerPrintHandler {
             System.out.println("No matches found") ;
             /*
             * TODO:
-            *  many-to-many matching: all ten incoming with each in DB
-            * better to handle prints as of specific fingers. lesser matching tasks
-            * TODO:
             *  save to fingerprint arraylist
-            * TODO: serialize at shutdown
+            * TODO: serialize at shutdown or save to db
             *
             * */
         }
         System.out.println("Match found") ;
         return null ;
+    }
+    public static FingerprintTemplate getFingerPrintTemplate(String filepath) {
+        FingerprintImage image;
+        try {
+            image = new FingerprintImage(Files.readAllBytes(Paths.get(filepath)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return new FingerprintTemplate(image);
     }
     private IdentityRecord matchFingerprint(FingerprintMatcher matcher) {
         IdentityRecord matchingId = null;
@@ -60,13 +70,7 @@ public class FingerPrintHandler {
     }
 
     private FingerprintMatcher getFingerPrintMatcher(String filepath) {
-        FingerprintImage image;
-        try {
-            image = new FingerprintImage(Files.readAllBytes(Paths.get(filepath)));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        FingerprintTemplate template = new FingerprintTemplate(image);
+        FingerprintTemplate template = this.getFingerPrintTemplate(filepath) ;
         return new FingerprintMatcher(template);
     }
 
