@@ -1,5 +1,6 @@
 package com.mosipcse.biometricauthsvc;
 
+import com.mosipcse.fingerprintutils.FingerPrintHandler;
 import com.mosipcse.fingerprintutils.IdentityRecord;
 import com.mosipcse.fingerprintutils.IdentityRecordFactory;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,9 @@ import java.util.*;
 
 @RestController
 public class FileController {
-
-    FileController() {
-
+    private FingerPrintHandler fpHandler ;
+    public FileController(FingerPrintHandler fpHandler) {
+        this.fpHandler = fpHandler ;
     }
 
     @PostMapping("/upload")

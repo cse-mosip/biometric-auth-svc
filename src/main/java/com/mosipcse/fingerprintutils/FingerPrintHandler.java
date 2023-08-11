@@ -1,6 +1,5 @@
 package com.mosipcse.fingerprintutils;
 
-
 import com.machinezoo.sourceafis.FingerprintImage;
 import com.machinezoo.sourceafis.FingerprintMatcher;
 import com.machinezoo.sourceafis.FingerprintTemplate;
@@ -75,4 +74,8 @@ public class FingerPrintHandler {
         FingerprintTemplate template = getFingerPrintTemplate(filepath) ;
         return new FingerprintMatcher(template);
     }
+    /*
+     * TODO add preDestruct method here to store the
+     * array list.
+     */
 }
