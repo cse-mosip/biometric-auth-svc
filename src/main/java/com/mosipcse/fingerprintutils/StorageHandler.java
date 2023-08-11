@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 public class StorageHandler {
     public static void serializeFingerprints(ArrayList<IdentityRecord> fingerprintData) {
+        // TODO: change this method to serialize a IdentityRecordDAO array object
         try (FileOutputStream fos = new FileOutputStream("fingerprintData");
              ObjectOutputStream oos = new ObjectOutputStream(fos);) {
 
@@ -21,20 +22,24 @@ public class StorageHandler {
             throw new RuntimeException(e);
         }
     }
-    public static ArrayList<IdentityRecord> loadFingerprints(String filename) {
-        ArrayList<IdentityRecord> list = new ArrayList<>();
+    public static ArrayList<IdentityRecord> loadFingerprints() {
+        ArrayList<IdentityRecordDAO> list = new ArrayList<>();
 
-        try (FileInputStream fis = new FileInputStream("fingerprintDatachang");
+        try (FileInputStream fis = new FileInputStream("fingerprintData");
              ObjectInputStream ois = new ObjectInputStream(fis);) {
 
-            list = (ArrayList<IdentityRecord>) ois.readObject();
+            list = (ArrayList<IdentityRecordDAO>) ois.readObject();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } catch (ClassNotFoundException c) {
             System.out.println("Class not found");
             c.printStackTrace();
         }
-        return list ;
+        ArrayList<IdentityRecord> idRecordList = new ArrayList<>() ;
+        for (IdentityRecordDAO idRecDAO:list
+             ) {idRecordList.add(convertFromDAO(idRecDAO));
+        }
+        return idRecordList ;
     }
     public static IdentityRecordDAO convertToDAO(IdentityRecord idRecord){
         String id = idRecord.getId() ;
@@ -42,5 +47,12 @@ public class StorageHandler {
         ArrayList<byte[]> fingerprintsByteArr = new ArrayList<>() ;
         fingerprints.forEach((temp)-> fingerprintsByteArr.add(temp.toByteArray()));
         return new IdentityRecordDAO(id, fingerprintsByteArr) ;
+    }
+    public static IdentityRecord convertFromDAO(IdentityRecordDAO idRecordDAO) {
+        String id = idRecordDAO.getId();
+        ArrayList<byte[]> fingerprints = idRecordDAO.getFingerprints() ;
+        ArrayList<FingerprintTemplate> fingerTemplates = new ArrayList<>();
+        fingerprints.forEach((temp)-> fingerTemplates.add(new FingerprintTemplate(temp)));
+        return new IdentityRecord(id, fingerTemplates) ;
     }
 }
