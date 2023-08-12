@@ -5,8 +5,10 @@ import com.mosipcse.fingerprintutils.FingerPrintHandler;
 import com.mosipcse.fingerprintutils.IdentityRecord;
 import com.mosipcse.fingerprintutils.IdentityRecordFactory;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,11 +23,11 @@ import java.util.*;
 public class FileController {
     private FingerPrintHandler fpHandler ;
     public FileController(FingerPrintHandler fpHandler) {
+        System.out.println("Initialization with bean complete");
         this.fpHandler = fpHandler ;
     }
 
     @PostMapping("/upload")
-
     public ResponseEntity<Object> uploadDataWithIndex(@RequestBody UploadRequest uploadRequest) {
 
         try {
@@ -113,6 +115,7 @@ public class FileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save files");
         }
     }
+
 }
 
 class UploadRequest {

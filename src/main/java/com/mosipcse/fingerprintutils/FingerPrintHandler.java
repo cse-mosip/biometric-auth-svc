@@ -3,6 +3,7 @@ package com.mosipcse.fingerprintutils;
 import com.machinezoo.sourceafis.FingerprintImage;
 import com.machinezoo.sourceafis.FingerprintMatcher;
 import com.machinezoo.sourceafis.FingerprintTemplate;
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -14,8 +15,11 @@ import java.util.ArrayList;
 public class FingerPrintHandler {
     private ArrayList<IdentityRecord> fingerprintDb;
 
-    public FingerPrintHandler() {
-        this.fingerprintDb = StorageHandler.loadFingerprints() ;
+    public FingerPrintHandler() {}
+
+    @PostConstruct
+    public void init() {
+        this.fingerprintDb = StorageHandler.loadFingerprints();
     }
     public String findMatchingPrint(String filepath) {
         System.out.println("Matching in progress");
