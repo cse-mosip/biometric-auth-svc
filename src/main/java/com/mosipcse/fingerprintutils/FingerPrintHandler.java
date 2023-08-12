@@ -1,17 +1,22 @@
 package com.mosipcse.fingerprintutils;
 
-
 import com.machinezoo.sourceafis.FingerprintImage;
 import com.machinezoo.sourceafis.FingerprintMatcher;
 import com.machinezoo.sourceafis.FingerprintTemplate;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+@Component
 public class FingerPrintHandler {
     private ArrayList<IdentityRecord> fingerprintDb;
+
+    public FingerPrintHandler() {
+        this.fingerprintDb = StorageHandler.loadFingerprints() ;
+    }
     public String findMatchingPrint(String filepath) {
         System.out.println("Matching in progress");
         FingerprintMatcher matcher = getFingerPrintMatcher(filepath);
@@ -31,16 +36,22 @@ public class FingerPrintHandler {
             System.out.println("No matches found") ;
             /*
             * TODO:
-            *  many-to-many matching: all ten incoming with each in DB
-            * better to handle prints as of specific fingers. lesser matching tasks
-            * TODO:
             *  save to fingerprint arraylist
-            * TODO: serialize at shutdown
+            * TODO: serialize at shutdown or save to db
             *
             * */
         }
         System.out.println("Match found") ;
         return null ;
+    }
+    public static FingerprintTemplate getFingerPrintTemplate(String filepath) {
+        FingerprintImage image;
+        try {
+            image = new FingerprintImage(Files.readAllBytes(Paths.get(filepath)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return new FingerprintTemplate(image);
     }
     private IdentityRecord matchFingerprint(FingerprintMatcher matcher) {
         IdentityRecord matchingId = null;
@@ -60,16 +71,11 @@ public class FingerPrintHandler {
     }
 
     private FingerprintMatcher getFingerPrintMatcher(String filepath) {
-        FingerprintImage image;
-        try {
-            image = new FingerprintImage(Files.readAllBytes(Paths.get(filepath)));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        FingerprintTemplate template = new FingerprintTemplate(image);
+        FingerprintTemplate template = getFingerPrintTemplate(filepath) ;
         return new FingerprintMatcher(template);
     }
-
-
-
+    /*
+     * TODO add preDestruct method here to store the
+     * array list.
+     */
 }

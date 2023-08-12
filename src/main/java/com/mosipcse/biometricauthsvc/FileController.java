@@ -1,6 +1,10 @@
 package com.mosipcse.biometricauthsvc;
 
 import com.mosipcse.fingerprintutils.FingerPrintHandler;
+
+import com.mosipcse.fingerprintutils.IdentityRecord;
+import com.mosipcse.fingerprintutils.IdentityRecordFactory;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,16 +15,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 public class FileController {
-
-    FileController() {
-
+    private FingerPrintHandler fpHandler ;
+    public FileController(FingerPrintHandler fpHandler) {
+        this.fpHandler = fpHandler ;
     }
 
     @PostMapping("/upload")
@@ -80,6 +81,7 @@ public class FileController {
                     }
                 }
             } else {
+                ArrayList<String> fileNameList = new ArrayList<>() ;
                 for (Data entry : uploadRequest.getData()) {
                     // Create a subfolder based on the provided index
                     Path subFolderPath = fullPath.resolve(index);
@@ -93,7 +95,12 @@ public class FileController {
                     Files.write(imagePath, entry.getBuffer().getData());
 
                     // You can now do something with the imagePath if needed
+                    fileNameList.add(String.valueOf(imagePath));
+
                 }
+                IdentityRecord idRecord = IdentityRecordFactory.createIdFromImages(fileNameList, index) ;
+
+
             }
 
             String responseMessage = "Files saved successfully.";
