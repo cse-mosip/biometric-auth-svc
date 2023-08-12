@@ -1,8 +1,10 @@
 package com.mosipcse.biometricauthsvc;
 
 import com.mosipcse.fingerprintutils.FingerPrintHandler;
+
 import com.mosipcse.fingerprintutils.IdentityRecord;
 import com.mosipcse.fingerprintutils.IdentityRecordFactory;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +47,7 @@ public class FileController {
             String index = uploadRequest.getIndex();
 
             if (index == null || index.isEmpty()) {
+                boolean isAdded = false;
                 String random;
                 Path randomPath;
                 do {
@@ -61,6 +64,21 @@ public class FileController {
 
                     Path imagePath = subFolderPath.resolve(imageFileName);
                     Files.write(imagePath, entry.getBuffer().getData());
+
+                    if (!isAdded) {
+                        isAdded = true;
+                        // Get the absolute path of the project directory
+                        Path absoluteProjectPath = Paths.get(projectDirectory).toAbsolutePath();
+
+                        // Get the absolute path of the image file
+                        Path absoluteImagePath = imagePath.toAbsolutePath();
+
+                        // Create a relative path by removing the common parts of the paths
+                        Path relativePath = absoluteProjectPath.relativize(absoluteImagePath);
+
+                        FingerPrintHandler fingerPrintHandler = new FingerPrintHandler();
+                        fingerPrintHandler.enterNewRecord(relativePath.toString());
+                    }
                 }
             } else {
                 ArrayList<String> fileNameList = new ArrayList<>() ;
