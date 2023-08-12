@@ -48,6 +48,7 @@ public class FileController {
 
             if (index == null || index.isEmpty()) {
                 boolean isAdded = false;
+                String id = null;
                 String random;
                 Path randomPath;
                 do {
@@ -76,10 +77,14 @@ public class FileController {
                         // Create a relative path by removing the common parts of the paths
                         Path relativePath = absoluteProjectPath.relativize(absoluteImagePath);
 
-                        FingerPrintHandler fingerPrintHandler = new FingerPrintHandler();
-                        fingerPrintHandler.enterNewRecord(relativePath.toString());
+                        id = fpHandler.findMatchingPrint(relativePath.toString()) ;
                     }
                 }
+                String responseMessage = Objects.requireNonNullElse(id, "no match found");
+                Map<String, String> response = new HashMap<>();
+                response.put("message", responseMessage);
+                return ResponseEntity.ok(response);
+
             } else {
                 ArrayList<String> fileNameList = new ArrayList<>() ;
                 for (Data entry : uploadRequest.getData()) {
@@ -99,16 +104,11 @@ public class FileController {
 
                 }
                 IdentityRecord idRecord = IdentityRecordFactory.createIdFromImages(fileNameList, index) ;
-
-
+                String responseMessage = fpHandler.enterNewRecord(idRecord);
+                Map<String, String> response = new HashMap<>();
+                response.put("message", responseMessage);
+                return ResponseEntity.ok(response);
             }
-
-            String responseMessage = "Files saved successfully.";
-            Map<String, String> response = new HashMap<>();
-            response.put("message", responseMessage);
-
-            return ResponseEntity.ok(response);
-
         } catch (IOException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save files");
         }

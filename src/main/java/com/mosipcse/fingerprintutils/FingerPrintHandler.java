@@ -28,9 +28,9 @@ public class FingerPrintHandler {
         System.out.println("Match found") ;
         return successfulMatch.getId();
     }
-    public String enterNewRecord(String filepath) {
+    public String enterNewRecord(IdentityRecord idRecord) {
         System.out.println("Matching in progress");
-        FingerprintMatcher matcher = getFingerPrintMatcher(filepath);
+        FingerprintMatcher matcher = new FingerprintMatcher(idRecord.getFingerprints().get(0)) ;
         IdentityRecord successfulMatch = matchFingerprint(matcher) ;
         if (successfulMatch == null) {
             System.out.println("No matches found") ;
@@ -40,9 +40,13 @@ public class FingerPrintHandler {
             * TODO: serialize at shutdown or save to db
             *
             * */
+            fingerprintDb.add(idRecord);
+            return "Fingerprint Added" ;
+        }else {
+            System.out.println("Match found") ;
+            return "Fingerprint already in database" ;
         }
-        System.out.println("Match found") ;
-        return null ;
+
     }
     public static FingerprintTemplate getFingerPrintTemplate(String filepath) {
         FingerprintImage image;
