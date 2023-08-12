@@ -1,8 +1,9 @@
 package com.mosipcse.fingerprintutils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class IdentityRecordDAO {
+public class IdentityRecordDAO implements Serializable {
     private final String id ;
     private final ArrayList<byte[]> fingerprints ;
 

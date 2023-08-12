@@ -4,6 +4,7 @@ import com.machinezoo.sourceafis.FingerprintImage;
 import com.machinezoo.sourceafis.FingerprintMatcher;
 import com.machinezoo.sourceafis.FingerprintTemplate;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -86,4 +87,14 @@ public class FingerPrintHandler {
      * TODO add preDestruct method here to store the
      * array list.
      */
+    @PreDestroy
+    public void saveFingerPrints() {
+        ArrayList<IdentityRecordDAO> idListDAO = new ArrayList<>() ;
+        for (IdentityRecord idRec: this.fingerprintDb
+             ) {
+            idListDAO.add(StorageHandler.convertToDAO(idRec));
+        }
+        System.out.println("serializing fingerprints");
+        StorageHandler.serializeFingerprints(idListDAO);
+    }
 }

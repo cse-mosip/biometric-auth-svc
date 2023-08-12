@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class StorageHandler {
-    public static void serializeFingerprints(ArrayList<IdentityRecord> fingerprintData) {
-        // TODO: change this method to serialize a IdentityRecordDAO array object
+    public static void serializeFingerprints(ArrayList<IdentityRecordDAO> fingerprintData) {
         try (FileOutputStream fos = new FileOutputStream("fingerprintData");
              ObjectOutputStream oos = new ObjectOutputStream(fos);) {
 
