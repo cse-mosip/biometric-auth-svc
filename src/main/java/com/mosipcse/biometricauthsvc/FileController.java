@@ -85,7 +85,11 @@ public class FileController {
                 String responseMessage = Objects.requireNonNullElse(id, "no match found");
                 Map<String, String> response = new HashMap<>();
                 response.put("message", responseMessage);
-                return ResponseEntity.ok(response);
+                if (Objects.isNull(id)) {
+                    return ResponseEntity.status(401).body(response);
+                }else {
+                    return ResponseEntity.ok(response) ;
+                }
 
             } else {
                 ArrayList<String> fileNameList = new ArrayList<>() ;
